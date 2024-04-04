@@ -24,9 +24,6 @@ LANGUAGE = SETTINGS.getLocalizedString
 EMAIL = SETTINGS.getSetting('email')
 PASSWORD = SETTINGS.getSetting('password')
 
-# EPG Settings
-FREE_STREAMS = SETTINGS.getSetting('include_free_channels')
-
 # Hidden Settings
 ACCESS_TOKEN = SETTINGS.getSetting('access_token')
 
@@ -85,10 +82,6 @@ def utcToLocal(utc_dt):
     local_dt = datetime.datetime.fromtimestamp(timestamp)
     assert utc_dt.resolution >= timedelta(microseconds=1)
     return local_dt.replace(microsecond=utc_dt.microsecond)
-
-
-def strip(str):
-    return "".join(list(filter(lambda x: x in PRINTABLE, str)))
 
 
 def addDir(name, handleID, url, mode, info=None, art=None, menu=None):

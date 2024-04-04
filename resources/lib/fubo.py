@@ -2,16 +2,16 @@ from resources.lib.globals import *
 
 class Fubotv:
 
-    default_headers = {
-        "accept":"*/*",
-        "accept-encoding":"gzip, deflate, br",
-        "accept-language":"en-US,en;q=0.5",
-        "origin":"https://www.fubo.tv",
-        "referer":"https://www.fubo.tv/",
-        "user-agent": USER_AGENT
-    }
+    # default_headers = {
+    #     "accept":"*/*",
+    #     "accept-encoding":"gzip, deflate, br",
+    #     "accept-language":"en-US,en;q=0.5",
+    #     "origin":"https://www.fubo.tv",
+    #     "referer":"https://www.fubo.tv/",
+    #     "user-agent": USER_AGENT
+    # }
 
-    login_headers = {
+    headers = {
         'User-Agent': USER_AGENT,
         'Accept': '*/*',
         'Accept-Language': 'en-US,en;q=0.5',
@@ -130,7 +130,7 @@ class Fubotv:
             "password": PASSWORD
         }
 
-        r = requests.put(f"{BASE_API}/signin", headers=cls.login_headers, json=payload)
+        r = requests.put(f"{BASE_API}/signin", headers=cls.headers, json=payload)
         xbmc.log(f"{payload} {r.text}")
         if r.ok and 'access_token' in r.json():
             SETTINGS.setSetting('access_token', r.json()['access_token'])
@@ -153,19 +153,17 @@ class Fubotv:
         SETTINGS.setSetting('token_expires', '')
 
     @classmethod
-    def ch_list(cls):
-        now = datetime.utcnow()
-        now2 = now + timedelta(hours=1)
-        url = f"https://api.fubo.tv/epg?startTime={now.year}-{str(now.month).zfill(2)}-{str(now.day).zfill(2)}T{str(now.hour).zfill(2)}%3A00%3A00.000Z&endTime={now2.year}-{str(now2.month).zfill(2)}-{str(now2.day).zfill(2)}T{str(now2.hour).zfill(2)}%3A00%3A00.000Z&enrichments=follow"
-        # cls.default_headers["authorization"] = f"Bearer {ACCESS_TOKEN}"
-        # url ="https://api.fubo.tv/papi/v1/guide/epg?start_time=2024-04-03T14%3A00%3A00.000Z&end_time=2024-04-03T14%3A30%3A00.000Z"
+    def ch_list(cls):        
+        start_time = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+        end_time = datetime.strftime(datetime.now(timezone.utc) + timedelta(hours=1), "%Y-%m-%dT%H:%M:%S.%fZ")
+        url = f"https://api.fubo.tv/epg?startTime={start_time}&endTime={end_time}&enrichments=follow"        
         xbmc.log(url)        
-        data = requests.get(url, headers=cls.default_headers).json()        
+        data = requests.get(url, headers=cls.headers).json()
         xbmc.log(f"{data}")
-        for item in data['response']:            
+        for item in data['response']:                        
             name = item['data']['channel']['name']
             id = item['data']['channel']['id']            
-            logo = item['data']['channel']['logoOnWhiteUrl']            
+            logo = item['data']['channel']['logoOnDarkUrl']            
 
             addLink(name, cls.handleID, '', art=logo, mode='play', channel_id=id)
         
@@ -174,15 +172,22 @@ class Fubotv:
     def get_stream_url(cls, ch_id):
         stream_url = ''
         drm = {}
-        cls.default_headers["authorization"] = f"Bearer {ACCESS_TOKEN}"
-        cls.default_headers["X-DRM-Scheme"] = "widevine"
-        cls.default_headers["X-Supported-Streaming-Protocols"] = "dash"
+        cls.headers["authorization"] = f"Bearer {ACCESS_TOKEN}"
+        cls.headers["X-DRM-Scheme"] = "widevine"
+        cls.headers["X-Supported-Streaming-Protocols"] = "dash"
 
         # Get streaming url
         #url = f"https://api.fubo.tv/v3/kgraph/v3/networks/{ch_id}/stream"        
-        url = f"{BASE_API}/vapi/asset/v1?channelId={ch_id}&trkOp=guide-schedule&trkOriginAppSection=guide&trkOriginPage=guide&type=live"
+        #url = f"{BASE_API}/vapi/asset/v1?channelId={ch_id}&trkOp=guide-schedule&trkOriginAppSection=guide&trkOriginPage=guide&type=live"
+        #url = f"{BASE_API}/papi/v1/playback?channelId={ch_id}&trkOp=guide-schedule&trkOriginAppSection=guide&trkOriginPage=guide&type=live"
+
+        
+        url = f"https://api.fubo.tv/vapi/asset/v1?channelId={ch_id}&trkOp=guide-schedule&trkOriginAppSection=guide&trkOriginPage=guide&type=live"
+        #url = f"https://api.fubo.tv/papi/v1/playback?channelId={ch_id}&hideActions=true&transient=true&trkOp=guide-schedule&trkOriginAppSection=guide&trkOriginPage=guide&type=live"
+        # "https://api.fubo.tv/papi/v1/playback?channelId=34856&ts=2024-04-04T14%3A00%3A01Z&type=live"        
+
         xbmc.log(url)
-        r = requests.get(url, headers=cls.default_headers)  
+        r = requests.get(url, headers=cls.headers)  
         log(f"{r.text}")          
         #sys.exit()                  
         if r.ok:            
