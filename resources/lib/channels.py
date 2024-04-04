@@ -7,44 +7,32 @@ class CHANNELS:
     channels = []
 
     def __init__(self):
-
-        env_urls = get_env_url()
-        self.cms_url = env_urls['cms_url']
-        self.channels_url = env_urls['channels_url']
-        self.get_channels()
-
-    def get_channels(self):
-        if USER_OFFSET == '' or USER_DMA == '':
-            log("User has not logged in")
-            return self.channels
-        debug = dict(urlParse.parse_qsl(DEBUG_CODE))
-        if 'channels' in debug:
-            channels_url = self.channels_url
-            r = requests.get(channels_url, headers=HEADERS)
-            self.build_channels(r.json()['channels'])
-        else:
-            subs = binascii.b2a_base64(str.encode(LEGACY_SUBS.replace('+', ','))).decode().strip()
-            if subs:
-                channels_url = f"{self.cms_url}/cms/publish3/domain/channels/v4/{USER_OFFSET}/{USER_DMA}/{subs}/1.json"
-            else:
-                channels_url = f"{self.cms_url}/cms/publish3/domain/channels/v4/{USER_OFFSET}/{USER_DMA}/MTUw/1.json"
-
-            response = requests.get(channels_url, headers=HEADERS)
-            if response.ok:
-                response = response.json()
-                if 'subscriptionpacks' in response:
-                    sub_packs = response['subscriptionpacks']
-                    for sub_pack in sub_packs:
-                        if sub_pack['title'].lower() == "freestream" and FREE_STREAMS == 'false':
-                            continue
-                        if 'channels' in sub_pack:
-                            self.build_channels(sub_pack['channels'])
-
-        if self.channels:
-            self.channels = sorted(self.channels, key=lambda x: x['name'].upper().split('THE ')[1] if 'THE ' in x['name'].upper() else x['name'].upper())
-        return self.channels
+        self.build_channels()
+       
 
     def build_channels(self, channels):
+        start_time = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+        end_time = datetime.strftime(datetime.now(timezone.utc) + timedelta(hours=1), "%Y-%m-%dT%H:%M:%S.%fZ")
+        url = f"https://api.fubo.tv/epg?startTime={start_time}&endTime={end_time}&enrichments=follow"        
+        xbmc.log(url)        
+        data = requests.get(url, headers=cls.headers).json()
+        xbmc.log(f"{data}")
+        for channel in data['response']:                        
+            name = item['data']['channel']['name']
+            id = item['data']['channel']['id']            
+            logo = item['data']['channel']['logoOnDarkUrl']   
+
+            channel_dict = {
+                'name': channel['data']['channel']['name'],
+                'stream': f'plugin://plugin.video.slingtv/?mode=play&url={channel["qvt_url"]}',
+                'id': channel['title'],
+                'logo': channel['thumbnail']['url'],
+                'preset': channel['channel_number']
+            }
+            self.channels.append(channel_dict)         
+
+
+            addLink(name, cls.handleID, '', art=logo, mode='play', channel_id=id)
         for channel in channels:
             if 'metadata' in channel:
                 if xbmc.Monitor().abortRequested():
