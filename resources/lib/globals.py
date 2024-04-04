@@ -167,5 +167,3 @@ def addLink(name, handleID,  url, mode, info=None, art=None, total=0, channel_id
         url = ('%s?mode=%s&name=%s&channel_id=%s' % (ADDON_URL, mode, name, channel_id))
     xbmcplugin.addDirectoryItem(handle=handleID, url=url, listitem=link, totalItems=total)
     xbmcplugin.addSortMethod(handle=handleID, sortMethod=xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
-
-
