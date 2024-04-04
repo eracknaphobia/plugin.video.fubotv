@@ -118,7 +118,6 @@ class Fubotv:
                 sys.exit()                           
         else:
             token_expires = SETTINGS.getSetting('token_expires')
-            xbmc.log(f'{stringToDate(token_expires, "%Y-%m-%d %H:%M:%S")} < {datetime.now()} {stringToDate(token_expires, "%Y-%m-%d %H:%M:%S") < datetime.now()}')
             if token_expires is None or token_expires == '':
                 cls.login()
             elif stringToDate(token_expires, "%Y-%m-%d %H:%M:%S") < datetime.now():

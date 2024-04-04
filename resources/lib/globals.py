@@ -153,10 +153,10 @@ def addLink(name, handleID,  url, mode, info=None, art=None, total=0, channel_id
     link = xbmcgui.ListItem(name)
     if mode == 'info': link.setProperty('IsPlayable', 'false')
     else: link.setProperty('IsPlayable', 'true')
-    if info is None: link.setInfo(type='Video', infoLabels={'mediatype': 'video', 'title': name})
-    else:
-        if 'mediatype' in info: CONTENT_TYPE = '%ss' % info['mediatype']
-        link.setInfo(type='Video', infoLabels=info)
+    # if info is None: link.setInfo(type='Video', infoLabels={'mediatype': 'video', 'title': name})
+    # else:
+    #     if 'mediatype' in info: CONTENT_TYPE = '%ss' % info['mediatype']
+    #     link.setInfo(type='Video', infoLabels=info)
     if art is None: link.setArt({'thumb': ICON, 'fanart': FANART})
     else: link.setArt(art)    
     if properties is not None:
