@@ -13,10 +13,9 @@ class CHANNELS:
     def get_channels(self):
         start_time = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
         end_time = datetime.strftime(datetime.now(timezone.utc) + timedelta(hours=1), "%Y-%m-%dT%H:%M:%S.%fZ")
-        url = f"https://api.fubo.tv/epg?startTime={start_time}&endTime={end_time}&enrichments=follow"        
+        url = f"{BASE_API}/epg?startTime={start_time}&endTime={end_time}&enrichments=follow"        
         xbmc.log(url)        
-        data = requests.get(url, headers=headers).json()
-        xbmc.log(f"{data}")
+        data = requests.get(url, headers=headers).json()        
         for channel in data['response']:  
             channel_dict = {
                 'name': channel['data']['channel']['name'],

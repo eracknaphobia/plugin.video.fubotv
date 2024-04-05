@@ -10,10 +10,9 @@ class EPG:
             
         start_time = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
         end_time = datetime.strftime(datetime.now(timezone.utc) + timedelta(hours=1), "%Y-%m-%dT%H:%M:%S.%fZ")
-        url = f"https://api.fubo.tv/epg?startTime={start_time}&endTime={end_time}&enrichments=follow"        
+        url = f"{BASE_API}/epg?startTime={start_time}&endTime={end_time}&enrichments=follow"        
         xbmc.log(url)        
-        data = requests.get(url, headers=headers).json()
-        xbmc.log(f"{data}")
+        data = requests.get(url, headers=headers).json()        
         for channel in data['response']:              
             channel_id = channel['data']['channel']['id']
             for program in channel['data']['programsWithAssets']:
@@ -23,8 +22,10 @@ class EPG:
                 #xbmc.log(f'{datetime.strptime(program['assets'][0]['accessRights']['startTime'], "%Y-%m-%dT%H:%M:%SZ").astimezone(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S')}')
 
                 try:
-                    start_time = datetime.strptime(program['assets'][0]['accessRights']['startTime'], "%Y-%m-%dT%H:%M:%SZ").astimezone(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S')
-                    stop_time = datetime.strptime(program['assets'][0]['accessRights']['endTime'], "%Y-%m-%dT%H:%M:%SZ").astimezone(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S')
+                    # start_time = datetime.strptime(program['assets'][0]['accessRights']['startTime'], "%Y-%m-%dT%H:%M:%SZ").strftime('%Y-%m-%dT%H:%M:%S')
+                    # stop_time = datetime.strptime(program['assets'][0]['accessRights']['endTime'], "%Y-%m-%dT%H:%M:%SZ").strftime('%Y-%m-%dT%H:%M:%S')
+                    start_time = program['assets'][0]['accessRights']['startTime']
+                    stop_time = program['assets'][0]['accessRights']['endTime']
                     epg_dict['start'] = start_time
                     epg_dict['stop'] = stop_time
                 except:
