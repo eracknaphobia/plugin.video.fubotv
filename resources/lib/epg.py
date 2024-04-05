@@ -7,9 +7,6 @@ class EPG:
     channels = []
 
     def __init__(self):
-        env_urls = get_env_url()
-        self.cms_url = env_urls['cms_url']
-        self.channels_url = env_urls['channels_url']
         self.monitor = xbmc.Monitor()
 
     def get_channels(self):
@@ -72,9 +69,7 @@ class EPG:
         from collections import defaultdict
         epg = defaultdict(list)
 
-        if USER_OFFSET == '' or USER_DMA == '':
-            log("User has not logged in")
-            return epg
+        return epg
 
         self.get_channels()
 

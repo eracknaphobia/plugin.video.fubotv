@@ -29,21 +29,13 @@ class IPTVManager:
     @via_socket
     def send_channels(self):
         """Return JSON-STREAMS formatted python datastructure to IPTV Manager"""
-        from resources.lib.classes.channels import CHANNELS
-        sling_channels = CHANNELS()
-        channels = []
-        # for entry in sling_channels.get_channels():
-        #     channels.append(dict(
-        #         id=entry.get('id'),
-        #         name=entry.get('name'),
-        #         logo=entry.get('logo'),
-        #         stream=entry.get('url'),
-        #     ))
-        return dict(version=1, streams=sling_channels.get_channels())
+        from resources.lib.channels import CHANNELS
+        fubo_channels = CHANNELS()
+        return dict(version=1, streams=fubo_channels.get_channels())
 
     @via_socket
     def send_epg(self):
         """Return JSON-EPG formatted python data structure to IPTV Manager"""
-        from resources.lib.classes.epg import EPG
+        from resources.lib.epg import EPG
         epg = EPG()
         return dict(version=1, epg=epg.get_epg_data())

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.fubotv" version="2024.4.2" name="Fubo TV" provider-name="eracknaphobia">
+<addon id="plugin.video.fubotv" version="2024.4.4" name="Fubo TV" provider-name="eracknaphobia">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.requests" />

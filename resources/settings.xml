@@ -85,22 +85,22 @@
                         <allowempty>true</allowempty>
                     </constraints>
                 </setting>
-                <!-- <setting id="iptv.enabled" type="boolean">
+                <setting id="iptv.enabled" type="boolean">
                     <level>4</level>
                     <default>true</default>
                 </setting>
 
                 <setting id="iptv.channels_uri" type="string">
                     <level>4</level>
-                    <default>plugin://plugin.video.slingtv/iptv/channels</default>
+                    <default>plugin://plugin.video.fubotv/iptv/channels</default>
                     <constraints>
                         <allowempty>false</allowempty>
                     </constraints>
                 </setting>
 
-                <setting id="iptv.epg_uri" type="string">
+                <!-- <setting id="iptv.epg_uri" type="string">
                     <level>4</level>
-                    <default>plugin://plugin.video.slingtv/iptv/epg</default>
+                    <default>plugin://plugin.video.fubotv/iptv/epg</default>
                     <constraints>
                         <allowempty>false</allowempty>
                     </constraints>

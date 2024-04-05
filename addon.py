@@ -2,7 +2,6 @@ import routing
 from resources.lib.globals import *
 from resources.lib.fubo import Fubotv
 
-
 plugin = routing.Plugin()
 
 @plugin.route('/iptv/channels')
