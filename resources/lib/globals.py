@@ -31,6 +31,40 @@ BASE_API = 'https://api.fubo.tv'
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:124.0) Gecko/20100101 Firefox/124.0'
 VERIFY = True
 
+headers = {
+        'User-Agent': USER_AGENT,
+        'Accept': '*/*',
+        'Accept-Language': 'en-US,en;q=0.5',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'X-Ad-Id': '4_mACdZaSeS0GJ0d-v',
+        'X-Device-Group': 'desktop',
+        'X-Device-Type': 'desktop',
+        'X-Device-App': 'web',
+        'X-Device-Id': 'lcIv8gKevhMscHMB8h',
+        'X-Device-Platform': 'desktop',
+        'X-Device-Model': 'Windows NT 10.0 Firefox 124.0',
+        'X-Client-Version': 'R20240328.1',
+        'X-Player-Version': '3.0.2',
+        'X-Application-Id': 'fubo',
+        'X-Os': 'Windows',
+        'X-Os-Version': 'NT 10.0',
+        'X-Browser': 'Firefox',
+        'X-Browser-Version': '124.0',
+        'X-Browser-Engine': 'Gecko',
+        'X-Browser-Engine-Version': '20100101',
+        'X-Supported-Streaming-Protocols': 'hls,dash',
+        'X-Supported-Codecs-List': 'avc',
+        'X-DRM-Scheme': 'widevine',
+        'X-Supported-Features': 'vidai_my_stuff_moments',
+        'X-Preferred-Language': 'en-US',
+        'Content-Type': 'application/json',
+        'Origin': 'https://www.fubo.tv',
+        'Referer': 'https://www.fubo.tv/',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-site'
+    }
+
 def log(msg, level=xbmc.LOGDEBUG):
     if level == xbmc.LOGERROR: msg += ' ,' + traceback.format_exc()
     xbmc.log("------------------------------------------------")

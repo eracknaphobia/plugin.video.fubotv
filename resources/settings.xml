@@ -98,13 +98,13 @@
                     </constraints>
                 </setting>
 
-                <!-- <setting id="iptv.epg_uri" type="string">
+                <setting id="iptv.epg_uri" type="string">
                     <level>4</level>
                     <default>plugin://plugin.video.fubotv/iptv/epg</default>
                     <constraints>
                         <allowempty>false</allowempty>
                     </constraints>
-                </setting> -->
+                </setting>
             </group>
         </category>
     </section>
