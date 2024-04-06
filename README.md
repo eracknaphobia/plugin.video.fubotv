@@ -3,6 +3,7 @@
 ![License](https://img.shields.io/badge/License-GPL--3.0--only-success.svg)
 ![Kodi Version](https://img.shields.io/badge/Kodi-Nexus%2B-brightgreen)
 ![Contributors](https://img.shields.io/badge/Contributors-0eracknaphobia-darkgray)
+
 Fubo TV Add-On for Kodi
 * Uses [IPTV Manager](https://github.com/add-ons/service.iptv.manager) to integrate live channels into Kodi EPG
 
