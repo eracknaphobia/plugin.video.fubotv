@@ -25,17 +25,12 @@ class EPG:
                 start_time = program['assets'][0]['accessRights']['startTime'].replace('Z', '')
                 stop_time = program['assets'][0]['accessRights']['endTime'].replace('Z', '')
                 epg_dict['start'] = start_time
-                epg_dict['stop'] = stop_time
-                # except:
-                #     pass
-
-                # try:
-                #     if 'genres' in program['program']:
-                #         for genre in program['program']['genres']:
-                #             genres += f"{genre['name']} "
-                #     epg_dict['genre'] = genres
-                # except:
-                #     pass
+                epg_dict['stop'] = stop_time                
+                
+                if 'genres' in program['program']:
+                    for genre in program['program']['genres']:                        
+                        genres += f", {genre['name']}" if genres != '' else genre['name']
+                epg_dict['genre'] = genres.strip()
 
                 try:
                     epg_dict['date'] = program['program']['metadata']['originalAiringDate']

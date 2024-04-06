@@ -55,13 +55,13 @@ class Fubotv:
 
     @classmethod
     def run(cls):
-
-        cls.check_login()
+        
         if cls.mode is None:            
             cls.build_menu()
         elif cls.mode == "channels":
             cls.ch_list()
         elif cls.mode == "play":
+            cls.check_login()
             cls.play()
         elif cls.mode == "settings":
             xbmcaddon.Addon().openSettings()
@@ -102,8 +102,7 @@ class Fubotv:
     @classmethod
     def check_login(cls, email=EMAIL, password=PASSWORD):
         # First launch, credentials empty
-        if email == '' or password == '':
-            # firstrun wizard
+        if email == '' or password == '':            
             answer = yesNoDialog(LANGUAGE(30006), no=LANGUAGE(30004), yes=LANGUAGE(30005))
             if answer == 1:
                 global EMAIL, PASSWORD
@@ -114,6 +113,7 @@ class Fubotv:
                 EMAIL = email
                 PASSWORD = password 
                 cls.login()
+                notificationDialog("Logged In Successfully", header=ADDON_NAME, sound=False, time=1000, icon=ICON)
             else:
                 sys.exit()                           
         else:
@@ -133,11 +133,12 @@ class Fubotv:
         r = requests.put(f"{BASE_API}/signin", headers=cls.headers, json=payload)
         xbmc.log(f"{payload} {r.text}")
         if r.ok and 'access_token' in r.json():
+            global ACCESS_TOKEN
             SETTINGS.setSetting('access_token', r.json()['access_token'])
             SETTINGS.setSetting('id_token', r.json()['id_token'])
             SETTINGS.setSetting('refresh_token', r.json()['refresh_token'])
-            SETTINGS.setSetting('token_expires', datetime.strftime(datetime.now() + timedelta(hours=1), "%Y-%m-%d %H:%M:%S"))
-            notificationDialog("Logged In Successfully", header=ADDON_NAME, sound=False, time=1000, icon=ICON)
+            SETTINGS.setSetting('token_expires', datetime.strftime(datetime.now() + timedelta(hours=1), "%Y-%m-%d %H:%M:%S"))            
+            ACCESS_TOKEN = SETTINGS.getSetting('access_token')
         else:
             message = r.json()['error']['message']
             notificationDialog(message, header=ADDON_NAME, sound=False, time=1000, icon=ICON)
@@ -175,21 +176,11 @@ class Fubotv:
         cls.headers["authorization"] = f"Bearer {ACCESS_TOKEN}"
         cls.headers["X-DRM-Scheme"] = "widevine"
         cls.headers["X-Supported-Streaming-Protocols"] = "dash"
-
-        # Get streaming url
-        #url = f"https://api.fubo.tv/v3/kgraph/v3/networks/{ch_id}/stream"        
-        #url = f"{BASE_API}/vapi/asset/v1?channelId={ch_id}&trkOp=guide-schedule&trkOriginAppSection=guide&trkOriginPage=guide&type=live"
-        #url = f"{BASE_API}/papi/v1/playback?channelId={ch_id}&trkOp=guide-schedule&trkOriginAppSection=guide&trkOriginPage=guide&type=live"
-
         
         url = f"https://api.fubo.tv/vapi/asset/v1?channelId={ch_id}&trkOp=guide-schedule&trkOriginAppSection=guide&trkOriginPage=guide&type=live"
-        #url = f"https://api.fubo.tv/papi/v1/playback?channelId={ch_id}&hideActions=true&transient=true&trkOp=guide-schedule&trkOriginAppSection=guide&trkOriginPage=guide&type=live"
-        # "https://api.fubo.tv/papi/v1/playback?channelId=34856&ts=2024-04-04T14%3A00%3A01Z&type=live"        
-
         xbmc.log(url)
         r = requests.get(url, headers=cls.headers)  
         log(f"{r.text}")          
-        #sys.exit()                  
         if r.ok:            
             if 'stream' in r.json():
                 stream_url= r.json()['stream']['url']
