@@ -20,5 +20,5 @@ Fubo TV Add-On for Kodi
 ## Links
 
 * [Fubo TV](https://www.fubo.tv/)
-* [Kodi Forum Thread](#)
+* [Kodi Forum Thread](https://forum.kodi.tv/showthread.php?tid=376961)
 * [Kodi Wiki](https://kodi.wiki/view/Main_Page)
