@@ -223,7 +223,11 @@ class Fubotv:
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:124.0) Gecko/20100101 Firefox/124.0',
                 'Content-Type': 'application/octet-stream',
                 'Origin': 'https://www.fubo.tv',
-                'Referer': 'https://www.fubo.tv/'
+                'Referer': 'https://www.fubo.tv/',
+                'Sec-Fetch-Dest': 'empty',
+                'Sec-Fetch-Mode': 'cors',
+                'Sec-Fetch-Site': 'same-site'
+
             }
             xbmc.log(f"{drm}")
             from urllib.parse import urlencode
