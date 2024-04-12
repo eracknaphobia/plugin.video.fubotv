@@ -226,9 +226,11 @@ class Fubotv:
                 'Referer': 'https://www.fubo.tv/',
                 'Sec-Fetch-Dest': 'empty',
                 'Sec-Fetch-Mode': 'cors',
-                'Sec-Fetch-Site': 'same-site'
-
+                'Sec-Fetch-Site': 'same-site',
+                'TE': 'trailers',
+                'DNT': '1'
             }
+
             xbmc.log(f"{drm}")
             from urllib.parse import urlencode
             license_config = { # for Python < v3.7 you should use OrderedDict to keep order
